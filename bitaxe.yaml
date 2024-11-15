@@ -1,0 +1,353 @@
+#########################################################################
+# BitAxe Mining Dashboard Configuration for Home Assistant
+# This is part of a complete dashboard setup.
+# For full documentation and installation instructions:
+# 👉 See: https://github.com/satoshiradio/bitaxe-HAS-dashboard/README.md
+#########################################################################
+# Quick Setup:
+# 1. Place in /config/bitaxe.yaml
+# 2. Add to configuration.yaml: rest: !include bitaxe.yaml
+# 3. Configure in secrets.yaml:
+#    bitaxe_nerdaxe_ip: "http://192.168.x.x/api/system/info"
+#    bitaxe_supra_ip: "http://192.168.x.x/api/system/info"
+#    bitaxe_gamma_ip: "http://192.168.x.x/api/system/info"
+#    wallet_address: 'your-wallet-address'
+#    bitaxe_sr_resource: 'https://pool.satoshiradio.nl/api/v1/users/your-wallet-address'
+#
+# To add/remove miners: Copy/delete a miner section and update template sensors
+#########################################################################
+
+# NERDAXE
+- resource: !secret bitaxe_nerdaxe_ip
+  scan_interval: 30
+  authentication: basic
+  sensor:
+    - name: "NERDAXE POWER"
+      device_class: power
+      unit_of_measurement: "W"
+      value_template: "{{ value_json.power | float(0) | round(2) }}"
+
+    - name: "NERDAXE VOLTAGE"
+      device_class: voltage
+      unit_of_measurement: "V"
+      value_template: "{{ (value_json.voltage/1000) | float(0) | round(2) }}"
+
+    - name: "NERDAXE CURRENT"
+      device_class: current
+      unit_of_measurement: "A"
+      value_template: "{{ (value_json.current/1000) | float(0) | round(2) }}"
+
+    - name: "NERDAXE TEMP"
+      device_class: temperature
+      unit_of_measurement: "°C"
+      value_template: "{{ value_json.temp | int(0) }}"
+
+    - name: "NERDAXE HASHRATE"
+      unit_of_measurement: "GH/s"
+      value_template: "{{ value_json.hashRate | float(0) | round(2) }}"
+
+    - name: "NERDAXE BESTDIFF"
+      value_template: "{{ value_json.bestDiff[0:-1] | float(0) }}"
+
+    - name: "NERDAXE BESTSESSIONDIFF"
+      value_template: "{{ value_json.bestSessionDiff[0:-1] | float(0) }}"
+
+    - name: "NERDAXE FREQUENCY"
+      device_class: frequency
+      unit_of_measurement: "Hz"
+      value_template: "{{ value_json.frequency | int(0) }}"
+
+    - name: "NERDAXE SHARES ACCEPTED"
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.sharesAccepted | int(0) }}"
+
+    - name: "NERDAXE SHARES REJECTED"
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.sharesRejected | int(0) }}"
+
+    - name: "NERDAXE UPTIME"
+      device_class: duration
+      unit_of_measurement: "s"
+      value_template: "{{ value_json.uptimeSeconds | int(0) }}"
+
+    - name: "NERDAXE FAN SPEED"
+      unit_of_measurement: "%"
+      value_template: "{{ value_json.fanspeed | int(0) }}"
+
+    - name: "NERDAXE FAN RPM"
+      unit_of_measurement: "RPM"
+      value_template: "{{ value_json.fanrpm | int(0) }}"
+
+# SUPRA
+- resource: !secret bitaxe_supra_ip
+  scan_interval: 30
+  authentication: basic
+  sensor:
+    - name: "SUPRA POWER"
+      device_class: power
+      unit_of_measurement: "W"
+      value_template: "{{ value_json.power | float(0) | round(2) }}"
+
+    - name: "SUPRA VOLTAGE"
+      device_class: voltage
+      unit_of_measurement: "V"
+      value_template: "{{ (value_json.voltage/1000) | float(0) | round(2) }}"
+
+    - name: "SUPRA CURRENT"
+      device_class: current
+      unit_of_measurement: "A"
+      value_template: "{{ (value_json.current/1000) | float(0) | round(2) }}"
+
+    - name: "SUPRA TEMP"
+      device_class: temperature
+      unit_of_measurement: "°C"
+      value_template: "{{ value_json.temp | int(0) }}"
+
+    - name: "SUPRA HASHRATE"
+      unit_of_measurement: "GH/s"
+      value_template: "{{ value_json.hashRate | float(0) | round(2) }}"
+
+    - name: "SUPRA BESTDIFF"
+      value_template: "{{ value_json.bestDiff[0:-1] | float(0) }}"
+
+    - name: "SUPRA BESTSESSIONDIFF"
+      value_template: "{{ value_json.bestSessionDiff[0:-1] | float(0) }}"
+
+    - name: "SUPRA FREQUENCY"
+      device_class: frequency
+      unit_of_measurement: "Hz"
+      value_template: "{{ value_json.frequency | int(0) }}"
+
+    - name: "SUPRA SHARES ACCEPTED"
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.sharesAccepted | int(0) }}"
+
+    - name: "SUPRA SHARES REJECTED"
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.sharesRejected | int(0) }}"
+
+    - name: "SUPRA UPTIME"
+      device_class: duration
+      unit_of_measurement: "s"
+      value_template: "{{ value_json.uptimeSeconds | int(0) }}"
+
+    - name: "SUPRA FAN SPEED"
+      unit_of_measurement: "%"
+      value_template: "{{ value_json.fanspeed | int(0) }}"
+
+    - name: "SUPRA FAN RPM"
+      unit_of_measurement: "RPM"
+      value_template: "{{ value_json.fanrpm | int(0) }}"
+
+# GAMMA
+- resource: !secret bitaxe_gamma_ip
+  scan_interval: 30
+  authentication: basic
+  sensor:
+    - name: "GAMMA POWER"
+      device_class: power
+      unit_of_measurement: "W"
+      value_template: "{{ value_json.power | float(0) | round(2) }}"
+
+    - name: "GAMMA VOLTAGE"
+      device_class: voltage
+      unit_of_measurement: "V"
+      value_template: "{{ (value_json.voltage/1000) | float(0) | round(2) }}"
+
+    - name: "GAMMA CURRENT"
+      device_class: current
+      unit_of_measurement: "A"
+      value_template: "{{ (value_json.current/1000) | float(0) | round(2) }}"
+
+    - name: "GAMMA TEMP"
+      device_class: temperature
+      unit_of_measurement: "°C"
+      value_template: "{{ value_json.temp | int(0) }}"
+
+    - name: "GAMMA HASHRATE"
+      unit_of_measurement: "GH/s"
+      value_template: "{{ value_json.hashRate | float(0) | round(2) }}"
+
+    - name: "GAMMA BESTDIFF"
+      value_template: "{{ value_json.bestDiff[0:-1] | float(0) }}"
+
+    - name: "GAMMA BESTSESSIONDIFF"
+      value_template: "{{ value_json.bestSessionDiff[0:-1] | float(0) }}"
+
+    - name: "GAMMA FREQUENCY"
+      device_class: frequency
+      unit_of_measurement: "Hz"
+      value_template: "{{ value_json.frequency | int(0) }}"
+
+    - name: "GAMMA SHARES ACCEPTED"
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.sharesAccepted | int(0) }}"
+
+    - name: "GAMMA SHARES REJECTED"
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.sharesRejected | int(0) }}"
+
+    - name: "GAMMA UPTIME"
+      device_class: duration
+      unit_of_measurement: "s"
+      value_template: "{{ value_json.uptimeSeconds | int(0) }}"
+
+    - name: "GAMMA FAN SPEED"
+      unit_of_measurement: "%"
+      value_template: "{{ value_json.fanspeed | int(0) }}"
+
+    - name: "GAMMA FAN RPM"
+      unit_of_measurement: "RPM"
+      value_template: "{{ value_json.fanrpm | int(0) }}"
+
+# BITAXE SR Pool OWN Data
+- resource: !secret bitaxe_sr_resource
+  scan_interval: 30
+  method: GET
+  headers:
+    User-Agent: Home Assistant
+    Accept: application/json
+  sensor:
+    - name: "BITAXE SR"
+      unique_id: bitaxe_sr
+      json_attributes_path: "$"
+      json_attributes:
+        - hashrate1m
+        - hashrate5m
+        - hashrate1hr
+        - hashrate1d
+        - hashrate7d
+        - lastshare
+        - shares
+        - bestshare
+        - bestever
+        - authorised
+        - worker
+      value_template: "{{ value_json.hashrate1d }}"
+
+    - name: "BITAXE SR HASHRATE1M"
+      unique_id: bitaxe_sr_hashrate1m
+      unit_of_measurement: "GH/s"
+      value_template: "{{ (value_json.hashrate1m.split('T')[0] | float(0) * 1000) | round(2) }}"
+
+    - name: "BITAXE SR HASHRATE5M"
+      unique_id: bitaxe_sr_hashrate5m
+      unit_of_measurement: "GH/s"
+      value_template: "{{ (value_json.hashrate5m.split('T')[0] | float(0) * 1000) | round(2) }}"
+
+    - name: "BITAXE SR HASHRATE1HR"
+      unique_id: bitaxe_sr_hashrate1hr
+      unit_of_measurement: "GH/s"
+      value_template: "{{ (value_json.hashrate1hr.split('T')[0] | float(0) * 1000) | round(2) }}"
+
+    - name: "BITAXE SR HASHRATE1D"
+      unique_id: bitaxe_sr_hashrate1d
+      unit_of_measurement: "GH/s"
+      value_template: "{{ (value_json.hashrate1d.split('T')[0] | float(0) * 1000) | round(2) }}"
+
+    - name: "BITAXE SR HASHRATE7D"
+      unique_id: bitaxe_sr_hashrate7d
+      unit_of_measurement: "GH/s"
+      value_template: "{{ (value_json.hashrate7d.split('T')[0] | float(0) * 1000) | round(2) }}"
+
+    - name: "BITAXE SR LASTSHARE"
+      unique_id: bitaxe_sr_lastshare
+      unit_of_measurement: "share"
+      value_template: "{{ value_json.lastshare | int(0) }}"
+
+    - name: "BITAXE SR SHARES"
+      unique_id: bitaxe_sr_shares
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.shares | int(0) }}"
+
+    - name: "BITAXE SR BESTSHARE"
+      unique_id: bitaxe_sr_bestshare
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.bestshare | float(0) | round(2) }}"
+
+    - name: "BITAXE SR BESTEVER"
+      unique_id: bitaxe_sr_bestever
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.bestever | int(0) }}"
+
+    - name: "BITAXE SR AUTHORISED"
+      unique_id: bitaxe_sr_authorised
+      unit_of_measurement: "workers"
+      value_template: "{{ value_json.authorised | int(0) }}"
+
+    - name: "BITAXE SR WORKER HASHRATE1D"
+      unique_id: bitaxe_sr_worker_hashrate1d
+      unit_of_measurement: "GH/s"
+      value_template: "{{ value_json.worker[0].hashrate1d.split('G')[0] | float(0) }}"
+
+# Aggregate total SRPOOL Stats
+- resource: "https://pool.satoshiradio.nl/api/v1/pool"
+  scan_interval: 30
+  method: GET
+  headers:
+    User-Agent: Home Assistant
+    Accept: application/json
+  sensor:
+    - name: "SRPOOL TOTAL HASHRATE1M"
+      unique_id: srpool_total_hashrate1m
+      unit_of_measurement: "TH/s"
+      value_template: "{{ value_json.hashrate1m.split('T')[0] | float(0) | round(2) }}"
+
+    - name: "SRPOOL TOTAL HASHRATE5M"
+      unique_id: srpool_total_hashrate5m
+      unit_of_measurement: "TH/s"
+      value_template: "{{ value_json.hashrate5m.split('T')[0] | float(0) | round(2) }}"
+
+    - name: "SRPOOL TOTAL HASHRATE1HR"
+      unique_id: srpool_total_hashrate1hr
+      unit_of_measurement: "TH/s"
+      value_template: "{{ value_json.hashrate1hr.split('T')[0] | float(0) | round(2) }}"
+
+    - name: "SRPOOL TOTAL HASHRATE1D"
+      unique_id: srpool_total_hashrate1d
+      unit_of_measurement: "TH/s"
+      value_template: "{{ value_json.hashrate1d.split('T')[0] | float(0) | round(2) }}"
+
+    - name: "SRPOOL TOTAL HASHRATE7D"
+      unique_id: srpool_total_hashrate7d
+      unit_of_measurement: "TH/s"
+      value_template: "{{ value_json.hashrate7d.split('T')[0] | float(0) | round(2) }}"
+
+    - name: "SRPOOL USERS"
+      unique_id: srpool_users
+      unit_of_measurement: "users"
+      value_template: "{{ value_json.Users | int(0) }}"
+
+    - name: "SRPOOL WORKERS"
+      unique_id: srpool_workers
+      unit_of_measurement: "workers"
+      value_template: "{{ value_json.Workers | int(0) }}"
+
+    - name: "SRPOOL IDLE WORKERS"
+      unique_id: srpool_idle_workers
+      unit_of_measurement: "workers"
+      value_template: "{{ value_json.Idle | int(0) }}"
+
+    - name: "SRPOOL DISCONNECTED WORKERS"
+      unique_id: srpool_disconnected_workers
+      unit_of_measurement: "workers"
+      value_template: "{{ value_json.Disconnected | int(0) }}"
+
+    - name: "SRPOOL DIFFICULTY"
+      unique_id: srpool_difficulty
+      value_template: "{{ value_json.diff | float(0) | round(3) }}"
+
+    - name: "SRPOOL ACCEPTED SHARES"
+      unique_id: srpool_accepted_shares
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.accepted | int(0) }}"
+
+    - name: "SRPOOL REJECTED SHARES"
+      unique_id: srpool_rejected_shares
+      unit_of_measurement: "shares"
+      value_template: "{{ value_json.rejected | int(0) }}"
+
+    - name: "SRPOOL SHARES PER SECOND"
+      unique_id: srpool_sps
+      unit_of_measurement: "SPS"
+      value_template: "{{ value_json.SPS1m | int(0) }}"

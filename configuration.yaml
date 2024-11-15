@@ -1,0 +1,127 @@
+#########################################################################
+# BitAxe Mining Dashboard - Configuration Additions
+# DO NOT REPLACE YOUR ENTIRE configuration.yaml WITH THIS FILE!
+# Instead, add these sections to your existing configuration.yaml
+# This is part of a complete dashboard setup.
+# For full documentation and installation instructions:
+# 👉 See: https://github.com/satoshiradio/bitaxe-HAS-dashboard/README.md
+#########################################################################
+
+#-------------------------------------------------------------------
+# 1. Add this line to enable the BitAxe integration
+# Add this where you keep your other !include statements
+#-------------------------------------------------------------------
+rest: !include bitaxe.yaml
+
+#-------------------------------------------------------------------
+# 2. Add this template section
+# If you already have a template: section, only add the sensors below it
+#-------------------------------------------------------------------
+template:
+  - sensor:
+      # Total Hashrate in GH/s
+      - name: "total_hashrate"
+        unit_of_measurement: "GH/s"
+        state: >
+          {% set total = states('sensor.nerdaxe_hashrate')|float(0) + 
+                        states('sensor.supra_hashrate')|float(0) + 
+                        states('sensor.gamma_hashrate')|float(0) %}
+          {{ total | round(2) }}
+
+      # Total Hashrate in TH/s
+      - name: "total_hashrate_th"
+        unit_of_measurement: "TH/s"
+        state: >
+          {% set total = states('sensor.nerdaxe_hashrate')|float(0) + 
+                        states('sensor.supra_hashrate')|float(0) + 
+                        states('sensor.gamma_hashrate')|float(0) %}
+          {{ (total / 1000) | round(3) }}
+
+      # Pool hashrate in TH/s
+      - name: "bitaxe_sr_hashrate1hr_th"
+        unit_of_measurement: "TH/s"
+        state: >
+          {% set gh_value = states('sensor.bitaxe_sr_hashrate1hr')|float(0) %}
+          {{ (gh_value / 1000) | round(1) }}
+
+      # Total Power
+      - name: "total_power"
+        unit_of_measurement: "W"
+        state: >
+          {% set total = states('sensor.nerdaxe_power')|float(0) + 
+                        states('sensor.supra_power')|float(0) + 
+                        states('sensor.gamma_power')|float(0) %}
+          {{ total | round(2) }}
+
+      # Miners Online Count
+      - name: "miners_online"
+        state: >
+          {% set online = namespace(count=0) %}
+          {% if states('sensor.nerdaxe_hashrate')|float(0) > 0 %}
+            {% set online.count = online.count + 1 %}
+          {% endif %}
+          {% if states('sensor.supra_hashrate')|float(0) > 0 %}
+            {% set online.count = online.count + 1 %}
+          {% endif %}
+          {% if states('sensor.gamma_hashrate')|float(0) > 0 %}
+            {% set online.count = online.count + 1 %}
+          {% endif %}
+          {{ online.count }}
+
+      # Total Efficiency
+      - name: "total_efficiency"
+        unit_of_measurement: "GH/W"
+        state: >
+          {% set hashrate = states('sensor.total_hashrate')|float(0) %}
+          {% set power = states('sensor.total_power')|float(0) %}
+          {% if power > 0 %}
+            {{ (hashrate / power) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+
+      # Total Uptime
+      - name: "total_uptime"
+        unit_of_measurement: "hours"
+        state: >
+          {% set uptimes = [
+            states('sensor.nerdaxe_uptime')|float(0),
+            states('sensor.supra_uptime')|float(0),
+            states('sensor.gamma_uptime')|float(0)
+          ] %}
+          {{ uptimes | sum | round(2) }}
+
+      # Miners Overheated (threshold at 85°C)
+      - name: "miners_overheated"
+        state: >
+          {% set overheated = namespace(count=0) %}
+          {% if states('sensor.nerdaxe_temp')|float(0) > 85 %}
+            {% set overheated.count = overheated.count + 1 %}
+          {% endif %}
+          {% if states('sensor.supra_temp')|float(0) > 85 %}
+            {% set overheated.count = overheated.count + 1 %}
+          {% endif %}
+          {% if states('sensor.gamma_temp')|float(0) > 85 %}
+            {% set overheated.count = overheated.count + 1 %}
+          {% endif %}
+          {{ overheated.count }}
+
+      # SR Pool Rejection Rate
+      - name: "srpool_rejection_rate"
+        unit_of_measurement: "%"
+        state: >
+          {% set accepted = states('sensor.srpool_accepted_shares')|float(0) %}
+          {% set rejected = states('sensor.srpool_rejected_shares')|float(0) %}
+          {% if accepted + rejected > 0 %}
+            {{ ((rejected / (accepted + rejected)) * 100) | round(3) }}
+          {% else %}
+            0
+          {% endif %}
+
+#########################################################################
+# INSTALLATION NOTES:
+# 1. These additions require the bitaxe.yaml file to be in your config folder
+# 2. If you have fewer/more miners, adjust the template sensors accordingly
+# 3. After adding these, restart Home Assistant
+# 4. See the README for full installation instructions
+#########################################################################

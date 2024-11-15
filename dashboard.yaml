@@ -1,0 +1,240 @@
+#########################################################################
+# BitAxe Mining Dashboard for Home Assistant
+# Part of: https://github.com/satoshiradio/bitaxe-HAS-dashboard
+# 
+# This is part of a complete dashboard setup.
+# For full documentation and installation instructions:
+# 👉 See: https://github.com/satoshiradio/bitaxe-HAS-dashboard/README.md
+#########################################################################
+#
+# Dashboard Installation:
+# 1. Install required custom card via HACS: mini-graph-card
+# 2. In Home Assistant, go to Settings -> Dashboards
+# 3. Click the 3 dots in the top right -> Create new dashboard
+# 4. Name it "BitAxe Mining"
+# 5. Click on the dashboard, then 3 dots -> Edit Dashboard
+# 6. Click the 3 dots again -> Raw configuration editor
+# 7. Paste the entire contents below this header
+# 8. Save
+#########################################################################
+
+title: Mining Overview
+views:
+  - type: sections
+    path: bitaxe-test
+    max_columns: 3
+    title: BitAxe Mining
+    sections:
+      - type: grid
+        cards:
+          - type: picture
+            image: https://pool.satoshiradio.nl/assets/SR_Mining_Emblem.png
+            title: SR Mining Emblem
+      - type: grid
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: entities
+                title: Overall Stats
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.total_hashrate
+                    name: Total Hashrate
+                    icon: mdi:pickaxe
+                  - entity: sensor.total_power
+                    name: Total Power
+                    icon: mdi:flash
+                  - entity: sensor.total_efficiency
+                    name: Efficiency
+                    icon: mdi:chart-line
+                    unit: GH/W
+                  - entity: sensor.total_uptime
+                    name: Total Uptime
+                    icon: mdi:timer-outline
+                  - entity: sensor.miners_online
+                    name: Miners Online
+                    icon: mdi:server-network
+                  - entity: sensor.miners_overheated
+                    name: Overheated Miners
+                    icon: mdi:thermometer-alert
+      - type: grid
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: entities
+                title: SR Pool Stats
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.srpool_total_hashrate1hr
+                    name: Pool Hashrate (1h)
+                    icon: mdi:pickaxe
+                  - entity: sensor.bitaxe_sr_hashrate1hr_th
+                    name: Pool Own Hashrate (1h)
+                  - entity: sensor.miners_online
+                    name: Own Miners Online
+                    icon: mdi:account-badge
+                  - entity: sensor.srpool_users
+                    name: Total Users
+                    icon: mdi:account-group
+                  - entity: sensor.srpool_workers
+                    name: Active Workers
+                    icon: mdi:desktop-tower-monitor
+      - type: grid
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:mini-graph-card
+                name: Live Own Hashrate
+                entities:
+                  - entity: sensor.total_hashrate
+                    name: Total Hashrate
+                    color: '#FF6600'
+                show:
+                  graph: true
+                  legend: false
+                points_per_hour: 4
+                hours_to_show: 24
+                line_width: 2
+                animate: true
+      - type: grid
+        cards:
+          - type: custom:mini-graph-card
+            name: Total Pool Hashrate (1 Week)
+            entities:
+              - entity: sensor.srpool_total_hashrate1hr
+                name: Pool
+                color: '#FF6600'
+            show:
+              graph: true
+              legend: false
+            points_per_hour: 4
+            hours_to_show: 168
+            line_width: 2
+            animate: true
+      - type: grid
+        cards:
+          - type: custom:mini-graph-card
+            name: Own Pool Hashrate (1 Week)
+            entities:
+              - entity: sensor.bitaxe_sr_hashrate1hr_th
+                name: Own
+                color: '#FF6600'
+            show:
+              graph: true
+              legend: false
+            points_per_hour: 4
+            hours_to_show: 168
+            line_width: 2
+            animate: true
+      - type: grid
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: entities
+                title: BitAxe Supra
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.supra_hashrate
+                    name: Hashrate
+                    icon: mdi:pickaxe
+                    unit: GH/s
+                  - entity: sensor.supra_power
+                    name: Power
+                    icon: mdi:flash
+                    unit: W
+                  - entity: sensor.supra_temp
+                    name: Temperature
+                    icon: mdi:thermometer
+                    unit: °C
+                  - entity: sensor.supra_fan_rpm
+                    name: Fan Speed
+                    icon: mdi:fan
+                    unit: '%'
+              - type: custom:mini-graph-card
+                name: Supra Hashrate
+                entities:
+                  - entity: sensor.supra_hashrate
+                    name: Supra
+                    color: '#FF6600'
+                show:
+                  graph: true
+                  legend: false
+                points_per_hour: 4
+                hours_to_show: 24
+                line_width: 2
+                animate: true
+      - type: grid
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: entities
+                title: NerdAxe
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.nerdaxe_hashrate
+                    name: Hashrate
+                    icon: mdi:pickaxe
+                    unit: GH/s
+                  - entity: sensor.nerdaxe_power
+                    name: Power
+                    icon: mdi:flash
+                    unit: W
+                  - entity: sensor.nerdaxe_temp
+                    name: Temperature
+                    icon: mdi:thermometer
+                    unit: °C
+                  - entity: sensor.nerdaxe_fan_rpm
+                    name: Fan Speed
+                    icon: mdi:fan
+                    unit: '%'
+              - type: custom:mini-graph-card
+                name: Nerdaxe Hashrate
+                entities:
+                  - entity: sensor.nerdaxe_hashrate
+                    name: Nerdaxe
+                    color: '#FF6600'
+                show:
+                  graph: true
+                  legend: false
+                points_per_hour: 4
+                hours_to_show: 24
+                line_width: 2
+                animate: true
+      - type: grid
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: entities
+                title: BitAxe Gamma
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.gamma_hashrate
+                    name: Hashrate
+                    icon: mdi:pickaxe
+                    unit: GH/s
+                  - entity: sensor.gamma_power
+                    name: Power
+                    icon: mdi:flash
+                    unit: W
+                  - entity: sensor.gamma_temp
+                    name: Temperature
+                    icon: mdi:thermometer
+                    unit: °C
+                  - entity: sensor.gamma_fan_rpm
+                    name: Fan Speed
+                    icon: mdi:fan
+                    unit: '%'
+              - type: custom:mini-graph-card
+                name: Gamma Hashrate
+                entities:
+                  - entity: sensor.gamma_hashrate
+                    name: Gamma
+                    color: '#FF6600'
+                show:
+                  graph: true
+                  legend: false
+                points_per_hour: 4
+                hours_to_show: 24
+                line_width: 2
+                animate: true
+    cards: []
