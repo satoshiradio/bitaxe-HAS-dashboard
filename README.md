@@ -111,9 +111,9 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 ## Acknowledgments
 - [BitAxe Community and Project](https://bitaxe.org/) - For creating this amazing open-source miner
-- Satoshi Radio Pool Team - For providing an excellent mining pool
+- Satoshi Radio Pool Community - For providing an excellent mining pool and the first draft of the dashboard
 - Home Assistant Community - For the platform and support
-- [[Bart Mol](https:/x.com/bart_mol)](https://x.com/Bart_Mol) - For the initial dashboard development
+- Bart Mol (https://x.com/Bart_Mol) - For the initial dashboard development
 
 ---
 Made with ❤️ by the BitAxe Community
